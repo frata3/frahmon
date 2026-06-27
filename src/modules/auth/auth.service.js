@@ -8,10 +8,12 @@ class AuthService {
     this.#userService = UserService;
   }
   async findUserByEmail(email) {
-    return await this.#userService.findOne({ email: email.toLowerCase() }) ? true : false;
+    return !!(await this.#userService
+      .findOne({ email: email.toLowerCase() })
+      .lean());
   }
   async createUser(userData) {
-    const existingUser = await this.#userService.findOne({ email: userData.email });
+    const existingUser = await this.#userService.findOne({ email: userData.email }).lean();
     if (existingUser) {
       const error = new Error("Email already registered");
       error.statusCode = 409;
@@ -24,7 +26,7 @@ class AuthService {
   }
   
   async authenticate({ email, password }) {
-      const user = await this.#userService.findOne({ email: email.toLowerCase() });
+      const user = await this.#userService.findOne({ email: email.toLowerCase() }).lean();
       if (!user) {
         throw new Error("Invalid email or password");
       }

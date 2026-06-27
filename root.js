@@ -1,5 +1,4 @@
 import helmet from "helmet";
-app.use(helmet());
 import express from "express";
 import router from "./src/app.routes.js";
 import expressEjsLayouts from "express-ejs-layouts";
@@ -14,6 +13,7 @@ import 'dotenv/config';
 
 async function main() {
   const app = express();
+  app.use(helmet());
   const port = process.env.EXPRESS_PORT;
   const server = http.createServer(app);
   await connectDB();
@@ -35,13 +35,13 @@ async function main() {
   app.use(flash());
 
   
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json({ limit: "100kb" }));
+  app.use(express.urlencoded({ extended: true, limit: "100kb" }));
   app.use((req, res, next) => {
     if (req.path.startsWith("/assets/css/dynamic")) {
       return next();
     }
-    express.static("public")(req, res, next);
+    express.static("public", {maxAge: "7d",  etag: true})(req, res, next);
   });
   app.set("view engine", "ejs");
   app.set("views", "./views");

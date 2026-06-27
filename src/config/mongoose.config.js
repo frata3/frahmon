@@ -6,7 +6,13 @@ export async function connectDB() {
     if (!mongoUrl) {
       throw new Error('MONGODB_URI is not defined in environment variables');
     }
-    await mongoose.connect(mongoUrl);
+
+    mongoose.set('autoIndex', process.env.NODE_ENV !== 'production');
+
+    await mongoose.connect(mongoUrl, {
+      maxPoolSize: 5
+    });
+
     console.log('Connected to MongoDB');
   } catch (err) {
     console.error('Failed to connect to MongoDB:', err.message);
