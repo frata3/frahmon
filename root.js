@@ -1,3 +1,5 @@
+import helmet from "helmet";
+app.use(helmet());
 import express from "express";
 import router from "./src/app.routes.js";
 import expressEjsLayouts from "express-ejs-layouts";
