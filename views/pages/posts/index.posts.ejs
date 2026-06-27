@@ -1,0 +1,31 @@
+<div class="posts-page">
+
+    <div class="posts-header">
+      <a href="/posts/new" class="add-post">+ پست جدید</a>
+    </div>
+  
+    <% if (!posts || posts.length === 0) { %>
+      <div class="empty-posts">
+        هنوز پستی نوشته نشده
+      </div>
+    <% } else { %>
+  
+      <div class="posts-grid">
+        <% posts.forEach(post => { %>
+          <a href="/posts/<%= post._id %>" class="post-card">
+  
+            <img src="<%= post.cover || '/assets/img/default.jpg' %>" alt="">
+  
+            <h3><%= post.title %></h3>
+  
+            <span class="post-date">
+              <%= toPersianDate(post.createdAt) %>
+            </span>
+  
+          </a>
+        <% }) %>
+      </div>
+  
+    <% } %>
+  
+  </div>  

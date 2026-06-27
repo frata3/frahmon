@@ -1,0 +1,36 @@
+.home-empty {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    gap: 1rem;
+  }
+  .home-empty h1 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 600;
+    margin: 0;
+  }
+  .home-empty p {
+    max-width: 520px;
+    font-size: 1rem;
+    line-height: 1.6;
+    opacity: 0.75;
+    margin: 0;
+  }
+  .home-empty .btn-primary {
+    margin-top: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: #fff;
+    background-color: var(--salmon, #ff5a5f);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .home-empty .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  }

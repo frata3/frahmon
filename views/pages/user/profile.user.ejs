@@ -1,0 +1,33 @@
+<div class="profile-container">
+
+    <!-- پروفایل وسط صفحه -->
+    <img 
+      src="<%= user.avatar || '/images/default-avatar.png' %>" 
+      alt="avatar"
+      class="avatar"
+    >
+
+    <div class="username">@<%= user.username %></div>
+    <div class="fullname"><%= user.fullname %></div>
+
+    <!-- اگر مالک باشد -->
+    <% if (isOwner) { %>
+      <a href="/settings/profile" class="edit-btn">ویرایش پروفایل</a>
+    <% } %>
+
+    <!-- پست‌ها -->
+    <% if (user.posts && user.posts.length > 0) { %>
+      <div class="posts">
+        <% user.posts.forEach(post => { %>
+          <div class="post">
+            <img src="<%= post.image %>" alt="post">
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="empty">
+        هنوز پستی منتشر نشده
+      </div>
+    <% } %>
+
+  </div>

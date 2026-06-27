@@ -1,0 +1,28 @@
+<aside class="sidebar sidebar-desktop">
+  <div class="sidebar-top">
+    <a href="/">
+      <img src="/assets/pictures/header-logo.png" alt="فرآهمون" class="sidebar-logo" />
+    </a>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul>
+      <li><a href="/posts" title="بلاگ"><i class="icon-plus"></i><span>بلاگ</span></a></li>
+      <li><a href="#" title="اعلانات"><i class="icon-bell"></i><span>اعلانات</span></a></li>
+      <li><a href="#" title="پیام‌ها"><i class="icon-message"></i><span>پیام‌ها</span></a></li>
+    </ul>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <a href="#" title="تنظیمات"><i class="icon-settings"></i><span>تنظیمات</span></a>
+    <a href="/auth/logout" title="خروج"><i class="icon-settings"></i><span>خروج</span></a>
+  </div>
+</aside>
+
+<nav class="bottom-nav-mobile">
+  <a href="/" title="خانه"><img src="/assets/icons/plant-2.svg" alt="home" class="nav-icon"></a>
+  <a href="/posts" title="بلاگ"><img src="/assets/icons/search.svg" alt="بلاگ" class="nav-icon"></a>
+  <a href="/posts" title="بلاگ"><img src="/assets/icons/plus.svg" alt="بلاگ" class="nav-icon"></a>
+  <a href="/posts" title="بلاگ"><img src="/assets/icons/message.svg" alt="بلاگ" class="nav-icon"></a>
+  <a href="/@<%= currentUser.username %>" title="بلاگ"><img src="<%= currentUser.avatar || '/assets/icons/user.svg' %>" alt="بلاگ" class="nav-icon"></a>
+</nav>

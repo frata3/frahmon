@@ -1,0 +1,23 @@
+<div class="new-post-page">
+
+    <h1>پست جدید</h1>
+  
+    <form action="/posts/new" method="POST" class="post-form">
+      <div class="form-group">
+        <label>تصویر</label>
+        <input type="file" name="cover" accept="image/*" disabled>
+      </div>
+      <div class="form-group">
+        <label>عنوان</label>
+        <input type="text" id="title" name="title" required>
+      </div>
+      <div class="form-group">
+        <label>متن پست</label>
+        <textarea id="content" name="content" rows="6" required></textarea>
+      </div>
+      <button type="submit" class="submit-btn">
+        انتشار پست
+      </button>
+    </form>
+  </div>
+  

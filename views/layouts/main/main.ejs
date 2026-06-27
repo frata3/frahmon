@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="current-user" content=<%- JSON.stringify(currentUser !== "guest" ? currentUser : "guest")%>>
+  <title id="page-title"><%- typeof title !== "undefined" ? title : 'فرآهمون' %></title>
+  <link rel="icon" href="data:,">
+  <% if (!disableMainCSS) { %>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <% } %>
+
+  <% if (typeof cssFiles !== "undefined" && cssFiles.length) { %>
+    <% cssFiles.forEach(function(file) { %>
+      <link 
+        rel="<%= file.rel || 'stylesheet' %>" 
+        href="<%= file.href %>" 
+        <% if (file.media) { %> media="<%= file.media %>" <% } %>
+        <% if (file.type) { %> type="<%= file.type %>" <% } %>
+        <% if (file.crossorigin) { %> crossorigin="<%= file.crossorigin %>" <% } %>
+      />
+    <% }) %>
+  <% }  %>
+  
+ 
+</head>
+
+<body class="<%= currentUser !== 'guest' ? 'logged-in' : 'guest' %>">
+  <% if (currentUser !== "guest") { %>
+    <%- include("./sidebar.ejs") %>
+  <% } %>
+  <div class="content">
+    <%- include("./header.ejs") %>
+    <main>
+      <%- body %>
+    </main>
+  </div>
+</body>
+
+ 
+<script src="/scripts/axios.min.js"></script>
+<script src="/scripts/main.js" type="module" defer></script>
+<% if (typeof jsFiles !== "undefined" && jsFiles.length) { %>
+  <% jsFiles.forEach(function(file) { %>
+    <script 
+      src="<%= file.src %>"
+          <%= file.type ? `type=${file.type}` : "" %>
+          <%= file.defer ? "defer" : "" %>
+          <%= file.async ? "async" : "" %>
+          <%= file.nomodule ? "nomodule" : "" %>
+          <%= file.crossorigin ? `crossorigin="${file.crossorigin}"` : "" %>
+      > </script>
+
+  <% }) %>
+<% } %>
+
+</html>

@@ -1,0 +1,28 @@
+<!-- Header Desktop -->
+<div class="header-desktop">
+  <div class="header-center">
+    <a href="/" title="خانه">خانه</a>
+    <div class="search-bar"></div>
+    <% if (currentUser !== "guest") { %>
+      <a class="user-profile-image" href="/@<%= currentUser.username %>">
+        <img src="<%= currentUser.avatar || '/assets/icons/user.svg' %>" />
+      </a>
+    <% } else { %>
+      <a href="/auth" title="ورود">ورود</a>
+    <% } %>
+  </div>
+</div>
+
+<div class="header-mobile">
+  <div class="header-mobile-content">
+    <% if (currentUser == "guest") { %>
+      <a class="mobile-user" href="/auth"><img src="<%= currentUser.avatar || '/assets/icons/user.svg' %>" /></a>
+      <div class="mobile-logo">
+        <a href="/">
+          <img src="/assets/pictures/header-logo.png" alt="فرآهمون" />
+        </a>
+      </div>
+    <% } else {}%>
+  </div>
+</div>
+

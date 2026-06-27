@@ -1,0 +1,21 @@
+<section class="auth-container">
+    <form action="/auth/register" method="POST" class="auth-form">
+      <h1>ثبت‌نام</h1>
+      <label for="email">ایمیل</label>
+      <input type="email" name="email" value="<%= email %>" />
+  
+      <label for="username">نام</label>
+      <input type="text" id="username" name="username" required />
+  
+      <label for="password">رمز عبور</label>
+      <input type="password" id="password" name="password" required />
+  
+      <button type="submit">ایجاد حساب</button>
+  
+      <p class="auth-switch">
+        حساب داری؟
+        <a href="/auth/login?email=<%= email %>">ورود</a>
+      </p>
+    </form>
+  </section>
+  

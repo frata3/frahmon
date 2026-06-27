@@ -1,0 +1,33 @@
+{
+  "name": "frahmon",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frata3/frahmon.git"
+  },
+  "license": "ISC",
+  "author": "Younes Zarinkhat",
+  "type": "module",
+  "main": "root.js",
+  "scripts": {
+    "dev": "nodemon start root.js",
+    "start": "node root.js"
+  },
+  "dependencies": {
+    "auto-bind": "^5.0.1",
+    "axios": "^1.13.2",
+    "bcrypt": "^6.0.0",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^6.0.0",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.2.1",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.2",
+    "jalali-moment": "^3.3.11",
+    "mongoose": "^9.0.2",
+    "nanoid": "^5.1.6",
+    "nodemon": "^3.1.11"
+  } 
+}

@@ -1,0 +1,65 @@
+<div class="post-container">
+    <h1 class="post-title"><%= post.title %></h1>
+    <div class="post-meta">
+      <span><%= toPersianDate(post.createdAt) %></span>
+    </div>
+    <div class="post-cover">
+      <img src="<%= post.cover %>" alt="">
+    </div>
+    <div class="post-content">
+      <%= post.content %>
+    </div>
+
+    <section class="comments">
+      <h3 class="comments-title">نظرات</h3>
+      <% if (currentUser !== "guest") { %>
+        <form class="comment-form" action="/posts/<%= post._id %>/comments" method="POST">
+          <textarea id="content" name="content" placeholder="نظر خود را بنویسید..." required></textarea>
+          <button type="submit">ارسال نظر</button>
+        </form>
+      <% } else { %>
+        <p class="comment-login-hint">
+          برای ثبت نظر <a href="/auth">وارد شوید</a>
+        </p>
+      <% } %>
+      <% if (!comments.length) { %>
+        <p class="no-comments">هنوز نظری ثبت نشده.</p>
+      <% } %>
+      <div class="comment-list">
+        <% comments
+          .filter(c => !c.parent)
+          .forEach(comment => { %>
+          <div class="comment">
+            <div class="comment-avatar">
+              <img src="<%= comment.author.avatar || '/assets/pictures/default-avatar.png' %>">
+            </div>
+            <div class="comment-body">
+              <div class="comment-header">
+                <strong><%= comment.author.fullname || comment.author.username %></strong>
+                <span><%= toPersianDate(comment.createdAt) %></span>
+              </div>
+              <p><%= comment.content %></p>
+              <!-- replies -->
+              <% comments
+                .filter(r => r.parent === comment._id)
+                .forEach(reply => { %>
+                <div class="comment reply">
+                  <div class="comment-avatar">
+                    <img src="<%= reply.author.avatar || '/assets/pictures/default-avatar.png' %>">
+                  </div>
+                  <div class="comment-body">
+                    <div class="comment-header">
+                      <strong><%= reply.author.fullname || comment.author.username%></strong>
+                      <span><%= toPersianDate(reply.createdAt) %></span>
+                    </div>
+                    <p><%= reply.content %></p>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+    <a href="/posts" class="back-link">بازگشت به لیست پست‌ها</a>
+  </div>  
