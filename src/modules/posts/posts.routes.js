@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import postController from './posts.controller.js';
-import requireLogin from "../../common/middleware/requireLogin.js";
+import requireLogin from "../../common/guard/auth.guard.js";
 
 const router = Router();
 router.use((req, res, next) => {

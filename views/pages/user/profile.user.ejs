@@ -1,21 +1,16 @@
 <div class="profile-container">
-
-    <!-- پروفایل وسط صفحه -->
     <img 
       src="<%= user.avatar || '/images/default-avatar.png' %>" 
       alt="avatar"
       class="avatar"
     >
-
     <div class="username">@<%= user.username %></div>
     <div class="fullname"><%= user.fullname %></div>
 
-    <!-- اگر مالک باشد -->
     <% if (isOwner) { %>
-      <a href="/settings/profile" class="edit-btn">ویرایش پروفایل</a>
+      <a href="@<%= user.username %>/account" class="edit-btn">ویرایش پروفایل</a>
     <% } %>
 
-    <!-- پست‌ها -->
     <% if (user.posts && user.posts.length > 0) { %>
       <div class="posts">
         <% user.posts.forEach(post => { %>

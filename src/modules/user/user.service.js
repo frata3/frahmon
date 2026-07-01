@@ -3,65 +3,72 @@ import UserModel from "./user.model.js";
 import postsService from "../posts/posts.service.js";
 class UserService {
   #userModel;
-  #postsService;
   constructor() {
     autoBind(this);
     this.#userModel = UserModel;
-    this.#postsService = postsService;
-  }
-  async findForSession(query) {
-    return await this.#userModel.findOne(query, {
-      email: 0,
-      password: 0,
-      __v: 0,
-      createdAt: 0,
-      updatedAt: 0,
-    }).lean();
-  }
-  async findOne(query) {
-    return await this.#userModel.findOne(query).lean();
-  }
-  async findUsersList() {
-    const users = await this.#userModel.find({}, { password: 0, __v: 0 }).lean();
-    return users;
-  }
-  async findByUsername(username) {
-    return await this.#userModel
-      .findOne({ username })
-      .select("_id username fullname avatar")
-      .lean();
-  }
-  async findById(id) {
-    return await this.#userModel.findById(id).lean();
-  }
-  async isEmailTaken(email) {
-    return await this.#userModel.findOne({ email }).lean();
-  }
-  async isUsernameTaken(username) {
-    return await this.#userModel.findOne({ username }).lean();
-  }
-  async update(user, field, value) {
-    user[field] = value;
-    await user.save();
-    return user;
   }
   async create(userData) {
     const user = new this.#userModel(userData);
     await user.save();
     return user;
   }
-  async findpostsPosts(userId, sort = "latest") {
-    return await this.#postsService.findUserPosts(userId, sort).lean();
+  async findForSession(query) {
+    return await this.#userModel
+      .findOne(query, {
+        email: 0,
+        password: 0,
+        __v: 0,
+        createdAt: 0,
+        updatedAt: 0,
+      })
+      .lean();
   }
-  
-  async findPublicPosts(username) {
-    const user = await this.#userModel.findOne({ username }).select("_id").lean();
-    if (!user) return [];
+  async findOne(query) {
+    return await this.#userModel.findOne(query).lean();
+  }
+  async getAccountData(userId) {
+    const user = await this.#userModel
+      .findById(userId)
+      .select("-password -__v")
+      .lean();
 
-    return await this.#postsService.getPostsByUser(user._id);
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    return user;
   }
-  async createPost(postData) {
-    return await this.#postsService.create(postData);
+  async updateAccount(userId, data) {
+    const { fullname, username, bio } = data;
+
+    if (username) {
+      const duplicate = await this.#userModel.findOne({
+        username,
+        _id: { $ne: userId },
+      });
+      if (duplicate) {
+        throw new Error("Username already exists");
+      }
+    }
+
+    const updateFields = {};
+    if (fullname !== undefined) updateFields.fullname = fullname;
+    if (username !== undefined) updateFields.username = username;
+    if (bio !== undefined) updateFields.bio = bio;
+
+    const user = await this.#userModel
+      .findByIdAndUpdate(userId, updateFields, {
+        returnDocument: "after",
+        runValidators: true,
+      })
+      .select("-password -__v");
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
   }
 }
 export default new UserService();

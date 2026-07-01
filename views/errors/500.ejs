@@ -1,0 +1,14 @@
+<style>
+    main{text-align: center;}
+</style>
+<% if (typeof status !== 'undefined') { %>
+  <p>Status: <%= status %></p>
+<% } %>
+
+<% if (typeof error_code !== 'undefined') { %>
+  <p>Error Code: <%= error_code %></p>
+<% } %>
+
+<% if (typeof message !== 'undefined') { %>
+  <p>Message: <%= message %></p>
+<% } %>

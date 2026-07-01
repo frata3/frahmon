@@ -1,6 +1,5 @@
 import autoBind from "auto-bind";
 import UserService from "./user.service.js";
-import bcrypt from "bcrypt";
 class UserController {
   #service;
   constructor() {
@@ -9,157 +8,60 @@ class UserController {
   }
   async userMainPage(req, res, next) {
     try {
-      const profileUser = req.profileUser;
-  
       res.addAssets({
-        css: ["/assets/css/me.css"],
-        js: [{ src: "/scripts/me.js", type: "module" }],
+        css: ["/assets/css/user.css"],
+        js: [{ src: "/scripts/user.js", type: "module" }],
       });
-  
       res.render("pages/user/profile.user.ejs", {
-        user: profileUser,
-        viewer: req.user,
+        user: req.profile,
         isOwner: req.isOwner
-      });
+    });
     } catch (error) {
       next(error);
     }
   }
+  async userAccountPage(req, res, next) {
+    try {
+      const userId = req.session.user._id;
+      const user = await this.#service.getAccountData(userId);
+
+      res.addAssets({
+        css: ["/assets/css/user.css"],
+        js: [{ src: "/scripts/user.js", type: "module" }],
+      });
+
+      res.render("pages/user/account.user.ejs", {
+        user,
+      });
+
+    } catch (error) {
+      next(error);
+    }
+  }
+  async updateAccount(req, res, next) {
+    try {
+      const userId = req.session.user._id;
+      const data = req.body;
   
-  async getUserpostsPosts(req, res, next) {
-    try {
-      const { sort = "latest" } = req.query;
-      const userId = req.session.user._id;
-
-      const postsPosts = await this.#service.findpostsPosts(userId, sort);
-
-      res.render(
-        "pages/user/me/posts",
-        {
-          posts: postsPosts,
-          layout: false,
-        },
-        (err, html) => {
-          if (err)
-            return res.status(500).send("خطا در بارگزاری پست‌های بلاگ" + err);
-          res.send(html);
-        }
-      );
-    } catch (err) {
-      next(err);
-    }
-  }
-
-  async getUserForumPosts(req, res, next) {
-    try {
-      const { sort = "latest", forumType = "all" } = req.query;
-      const userId = req.session.user._id;
-
-      const forumPosts = await this.#service.getForumPosts(
-        userId,
-        forumType,
-        sort
-      );
-
-      res.render(
-        "pages/user/me/forum",
-        {
-          posts: forumPosts,
-          layout: false,
-        },
-        (err, html) => {
-          if (err)
-            return res.status(500).send("خطا در بارگزاری پست‌های فروم" + err);
-          res.send(html);
-        }
-      );
-    } catch (err) {
-      next(err);
-    }
-  }
-
-  async getUsersList(req, res, next) {
-    try {
-      const users = await this.#service.findUsersList();
-      res.render(
-        "pages/user/me/users-list",
-        { users, layout: false },
-        (err, html) => {
-          if (err) {
-            return res.status(500).send("خطا در بارگزاری کاربران ها" + err);
-          }
-          res.send(html);
-        }
-      );
-    } catch (error) {
-      next(error);
-    }
-  }
-  async personalInfoPage(req, res, next) {
-    try {
-      res.render("pages/user/me/account", { layout: false }, (err, html) => {
-        if (err) {
-          return res.status(500).send("خطا در بارگزاری اطلاعات کاربری" + err);
-        }
-        res.send(html);
+      const user = await this.#service.updateAccount(userId, data);
+  
+      req.session.user = {
+        _id: user._id,
+        username: user.username,
+      };
+  
+      return res.json({
+        status: "success",
+        message: "Profile updated successfully",
+        data: user,
       });
     } catch (error) {
-      next(error);
-    }
-  }
-  async updatePersonalInfo(req, res, next) {
-    try {
-      const { field, value } = req.body;
-      const userId = req.session.user._id;
-      const user = await this.#service.findById(userId);
-
-      if (!user.schema.path(field)) {
-        return res
-          .status(400)
-          .json({ success: false, message: "فیلد مورد نظر وجود ندارد." });
+      if (error.message === "Username already exists") {
+        return res.status(409).json({ status: "error", message: error.message });
       }
-      if (field === "email") {
-        const existingUser = await this.#service.findOne({ email: value });
-        if (existingUser && existingUser._id.toString() !== userId) {
-          return res.status(400).json({
-            success: false,
-            message: "این ایمیل قبلاً استفاده شده است.",
-          });
-        }
+      if (error.message === "User not found") {
+        return res.status(404).json({ status: "error", message: error.message });
       }
-      if (field === "username") {
-        const existingUser = await this.#service.findOne({ username: value });
-        if (existingUser && existingUser._id.toString() !== userId) {
-          return res.status(400).json({
-            success: false,
-            message: "این نام کاربری قبلاً استفاده شده است.",
-          });
-        }
-      }
-      if (field === "password") {
-        const isMatch = await bcrypt.compare(value, user.password);
-        if (isMatch) {
-          return res.status(400).json({
-            success: false,
-            message: "رمز عبور جدید نمی‌تواند همان رمز قبلی باشد.",
-          });
-        }
-        user.password = await bcrypt.hash(value, 10);
-      }
-      if (!user) {
-        return res
-          .status(404)
-          .json({ success: false, message: "کاربر یافت نشد" });
-      }
-      await user.save();
-      user[field] = value;
-      await user.save();
-      res.json({ success: true, message: "اطلاعات با موفقیت بروزرسانی شد." });
-    } catch (error) {
-      console.error(error);
-      res
-        .status(500)
-        .json({ success: false, message: "خطا در بروزرسانی اطلاعات" });
       next(error);
     }
   }

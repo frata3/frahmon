@@ -1,0 +1,74 @@
+body {
+  font-family: Inter, sans-serif;
+}
+.container {
+  direction: ltr;
+  width: min(900px, 90%);
+  margin: auto;
+  padding: 60px 0;
+}
+header {
+  margin-bottom: 50px;
+}
+header h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+header p {
+  color: #666;
+  line-height: 1.8;
+}
+.timeline {
+  border-left: 3px solid #ddd;
+  padding-left: 30px;
+}
+.version {
+  position: relative;
+  background: white;
+  margin-bottom: 35px;
+  border-radius: 14px;
+  padding: 24px;
+  border: 1px solid #ececec;
+  transition: 0.25s;
+}
+.version:hover {
+  transform: translateY(-2px);
+}
+.version::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background: #cfcfcf;
+  border-radius: 50%;
+  position: absolute;
+  left: -39px;
+  top: 30px;
+}
+.badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: #ececec;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+.version h2 {
+  margin-bottom: 14px;
+}
+.version ul {
+  padding-left: 18px;
+}
+.version li {
+  margin-bottom: 8px;
+  color: #555;
+}
+.completed {
+  border-color: #4caf50;
+}
+.completed::before {
+  background: #4caf50;
+}
+.completed .badge {
+  background: #4caf50;
+  color: white;
+}

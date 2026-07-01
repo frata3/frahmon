@@ -1,0 +1,43 @@
+<section class="account-page">
+
+  <div class="account-header">
+    <h1>Account Settings</h1>
+    <p>Manage your public profile information.</p>
+  </div>
+
+  <form id="account-form" class="account-form">
+
+    <div class="avatar-wrapper">
+      <img src="<%= user.avatar || '/assets/images/default-avatar.png' %>" alt="Avatar" class="avatar-preview">
+      <input type="file" name="avatar" id="avatar" accept="image/*" disabled>
+    </div>
+
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input id="username" name="username" type="text" value="<%= user.username %>">
+    </div>
+
+    <div class="form-group">
+      <label for="fullname">Full Name</label>
+      <input id="fullname" name="fullname" type="text" value="<%= user.fullname || '' %>">
+    </div>
+
+    <div class="form-group">
+      <label for="bio">Bio</label>
+      <textarea id="bio" name="bio" rows="5"><%= user.bio || '' %></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" value="<%= user.email %>" disabled>
+    </div>
+
+    <div class="actions">
+      <button type="submit">
+        Save Changes
+      </button>
+    </div>
+
+  </form>
+
+</section>

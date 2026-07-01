@@ -22,11 +22,7 @@ class AuthController {
       });
   
     } catch (error) {
-      return res.status(500).render("error", {
-        status: "error",
-        error_code: "check email failed",
-        message: "Internal server error",
-      });
+      next(error)
     }
   }
   async renderAuthPage(req, res, next) {
@@ -46,17 +42,12 @@ class AuthController {
         password,
         email,
         username,
-        // role: "member"
       });
       req.session.user = {
         _id: user._id,
-        email: user.email,
         username: user.username,
-        avatar: user.avatar,
-        role: user.role
       };
       return res.redirect(303, '/');
-
     } catch (error) {
       return res.status(error.statusCode || 400).json({
         status: "error",
@@ -77,11 +68,7 @@ class AuthController {
       const user = await this.#service.authenticate({ email, password });
       req.session.user = {
         _id: user._id,
-        email: user.email,
-        fullname: user.fullname,
         username: user.username,
-        avatar: user.avatar,
-        role: user.role,
       };
       return res.redirect(303, '/');
     } catch (error) {
